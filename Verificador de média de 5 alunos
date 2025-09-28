@@ -1,0 +1,66 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <iomanip> 
+using namespace std;
+
+int main() {
+    const int numAlunos = 5;
+    const int numNotas = 3;
+
+    vector<string> nomes(numAlunos);
+    vector<vector<float>> notas(numAlunos, vector<float>(numNotas));
+    vector<float> medias(numAlunos);
+
+    float somaNotas;
+    float maiorMedia = -1.0;
+    string nomeMaiorMedia;
+    int indiceAluno, indiceNota;
+
+    cout << "--- Coleta de dados dos alunos ---\n";
+    for (indiceAluno = 0; indiceAluno < numAlunos; ++indiceAluno) {
+        cout << "\nDigite o nome do aluno " << indiceAluno + 1 << ": ";
+        cin.ignore();
+        getline(cin, nomes[indiceAluno]);
+
+        somaNotas = 0.0;
+        cout << "Digite as " << numNotas << " notas de " << nomes[indiceAluno] << " (0 a 10):\n";
+        for (indiceNota = 0; indiceNota < numNotas; ++indiceNota) {
+            float nota;
+            do {
+                cout << "Nota " << indiceNota + 1 << ": ";
+                cin >> nota;
+                if (nota < 0.0 || nota > 10.0) {
+                    cout << "Valor inválido! Digite uma nota entre 0 e 10.\n";
+                }
+            } while (nota < 0.0 || nota > 10.0);
+
+            notas[indiceAluno][indiceNota] = nota;
+            somaNotas += nota;
+        }
+        medias[indiceAluno] = somaNotas / numNotas;
+    }
+
+    cout << "\nALUNO" << setw(8) << "N1" << setw(6) << "N2" << setw(6) << "N3"
+         << setw(8) << "MÉDIA" << setw(12) << "SITUAÇÃO\n";
+    cout << "---------------------------------------------\n";
+
+    for (indiceAluno = 0; indiceAluno < numAlunos; ++indiceAluno) {
+        cout << left << setw(10) << nomes[indiceAluno]; 
+        for (indiceNota = 0; indiceNota < numNotas; ++indiceNota) {
+            cout << fixed << setprecision(1) << setw(6) << notas[indiceAluno][indiceNota];
+        }
+        cout << setw(8) << medias[indiceAluno];
+        cout << setw(12) << (medias[indiceAluno] >= 7.0 ? "Aprovado" : "Reprovado") << "\n";
+
+        if (medias[indiceAluno] > maiorMedia) {
+            maiorMedia = medias[indiceAluno];
+            nomeMaiorMedia = nomes[indiceAluno];
+        }
+    }
+
+    cout << "\nAluno com maior média: " << nomeMaiorMedia
+         << " (" << maiorMedia << ")\n";
+
+    return 0;
+}
